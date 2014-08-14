@@ -1,9 +1,10 @@
 class Train_stations
 
-attr_reader :location
+attr_reader :location, :id
 
   def initialize(attributes)
     @location = attributes[:location]
+    @id = attributes[:id]
   end
 
 

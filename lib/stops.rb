@@ -1,9 +1,10 @@
 class Stops
-attr_reader :stop_location,:train_name
+attr_reader :station_id, :train_id, :id
 
   def initialize(attributes)
-    @stop_location = attributes[:stop_location]
-    @train_name = attributes[:train_name]
+    @station_id = attributes[:station_id]
+    @train_id = attributes[:train_id]
+    @id = attributes[:id]
   end
 
 
@@ -11,23 +12,23 @@ attr_reader :stop_location,:train_name
     @train_stops = []
     results = DB.exec("SELECT * FROM stops;")
     results.each  do |result|
-      @train_stops << Stops.new({:stop_location => result['stop_location'],
-                                :train_name => result ['train_name']})
+      @train_stops << Stops.new({:station_id => result['station_id'].to_i,
+                                :train_id => result ['train_id'].to_i})
     end
     @train_stops
   end
 
 
   def save
-    results = DB.exec("INSERT INTO stops(stop_location, train_name)
-      VALUES ('#{@stop_location}', '#{@train_name}') RETURNING id;")
+    results = DB.exec("INSERT INTO stops (station_id, train_id)
+      VALUES ('#{@station_id}', '#{@train_id}') RETURNING id;")
 
       @id = results.first['id'].to_i
   end
 
   def ==(another_line)
-    (self.train_name == another_line.train_name) &&
-    (self.stop_location == another_line.stop_location)
+    (self.train_id == another_line.train_id) &&
+    (self.station_id == another_line.station_id)
   end
 
 end
