@@ -1,6 +1,8 @@
 class Trains
-  def initialize(attributes)
-    @stops = attributes['stops']
+attr_reader :stops
 
+  def initialize(attributes)
+    @stops = attributes[:stops]
   end
+
 end
