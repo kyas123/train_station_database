@@ -1,4 +1,4 @@
-class Stops
+class Stop
 attr_reader :station_id, :train_id, :id
 
   def initialize(attributes)
@@ -12,7 +12,7 @@ attr_reader :station_id, :train_id, :id
     @train_stops = []
     results = DB.exec("SELECT * FROM stops;")
     results.each  do |result|
-      @train_stops << Stops.new({:station_id => result['station_id'].to_i,
+      @train_stops << Stop.new({:station_id => result['station_id'].to_i,
                                 :train_id => result ['train_id'].to_i})
     end
     @train_stops

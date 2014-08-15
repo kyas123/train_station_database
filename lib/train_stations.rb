@@ -1,4 +1,4 @@
-class Train_stations
+class TrainStation
 
 attr_reader :location, :id
 
@@ -12,7 +12,7 @@ attr_reader :location, :id
     @train_stations = []
     results = DB.exec("SELECT * FROM train_stations;")
     results.each  do |result|
-      @train_stations << Train_stations.new({:location => result['location']})
+      @train_stations << TrainStation.new({:location => result['location']})
     end
     @train_stations
   end
@@ -29,4 +29,17 @@ attr_reader :location, :id
     self.location == another_station.location
   end
 
+  def stops
+    trains =[]
+    results = DB.exec("SELECT train_lines.* FROM train_stations
+                      JOIN stops ON (train_stations.id = stops.station_id)
+                      JOIN train_lines ON (stops.train_id = train_lines.id)
+                      WHERE stops.station_id = #{@id};")
+    results.each do |result|
+      trains << result
+    end
+    trains
+  end
 end
+
+

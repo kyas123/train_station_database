@@ -1,4 +1,5 @@
-class Train_lines
+require 'pry'
+class TrainLine
 attr_reader :name, :id
 
   def initialize(attributes)
@@ -11,7 +12,7 @@ attr_reader :name, :id
     @train_lines = []
     results = DB.exec("SELECT * FROM train_lines;")
     results.each  do |result|
-      @train_lines << Train_lines.new({:name => result['name']})
+      @train_lines << TrainLine.new({:name => result['name']})
     end
     @train_lines
   end
@@ -28,4 +29,22 @@ attr_reader :name, :id
     self.name == another_line.name
   end
 
+
+  def stops
+    train_stops = []
+    results = DB.exec("SELECT train_stations.* FROM train_lines
+                      JOIN stops ON (train_lines.id = stops.train_id)
+                      JOIN train_stations ON (stops.station_id = train_stations.id)
+                       WHERE stops.train_id = #{@id};")
+    results.each  do |result|
+      train_stops << result
+      end
+      train_stops
+  end
 end
+
+
+# select animals.* from
+# trainers join lessons on (trainers.id = lessons.trainer_id)
+#          join animals on (lessons.animal_id = animals.id)
+# where trainers.id = 1;
